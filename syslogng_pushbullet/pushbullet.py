@@ -16,13 +16,16 @@ class PushbulletClient(object):
 
     def list_devices(self):
         """List devices"""
-        return self.session.get(DEVICES_URL).json()
+        response = self.session.get(DEVICES_URL)
+        if response.status_code == 200:
+            return response.json()
 
     def device_by_nickname(self, nickname):
         """Get device identifier with a nickname"""
         devices = self.list_devices()
-        return next((d["iden"] for d in devices.get("devices", [])
-                     if nickname == d.get("nickname")), None)
+        if devices:
+            return next((d["iden"] for d in devices.get("devices", [])
+                         if nickname == d.get("nickname")), None)
 
     def push_note(self, device_iden, title, body):
         """Push note to a device"""
@@ -33,4 +36,4 @@ class PushbulletClient(object):
                 "type": "note",
                 "title": title,
                 "body": body
-            })
+            }).raise_for_status()

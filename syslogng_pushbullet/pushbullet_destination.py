@@ -2,6 +2,8 @@
 
 from __future__ import print_function
 
+import requests
+
 from .destination import Destination
 from .pushbullet import PushbulletClient
 
@@ -29,6 +31,9 @@ class PushbulletDestination(Destination):
         return True
 
     def send(self, message):
-        self.client.push_note(self.device_iden, self.TITLE_TEMPLATE % message,
-                              self.BODY_TEMPLATE % message)
-        return True
+        try:
+            self.client.push_note(self.device_iden, self.TITLE_TEMPLATE % message, self.BODY_TEMPLATE % message)
+        except requests.HTTPError:
+            return False
+        else:
+            return True
