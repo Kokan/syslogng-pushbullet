@@ -29,7 +29,7 @@ destination pushbullet {
 };
 
 filter ssh_accept {
-  program("sshd") and match("^Accepted key" value("MESSAGE"))
+  program("sshd") and match("^Accepted publickey" value("MESSAGE"))
 };
 
 log { source(src); filter(ssh_accept); destination(pushbullet); };
