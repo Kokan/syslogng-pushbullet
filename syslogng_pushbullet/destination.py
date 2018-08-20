@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 class Destination(object):
     """Destination base"""
 
@@ -20,4 +21,3 @@ class Destination(object):
 
     def send(self, message):
         return True
-    

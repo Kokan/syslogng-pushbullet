@@ -29,7 +29,6 @@ class PushbulletDestination(Destination):
         return True
 
     def send(self, message):
-        self.client.push_note(self.device_iden,
-                              self.TITLE_TEMPLATE % message,
+        self.client.push_note(self.device_iden, self.TITLE_TEMPLATE % message,
                               self.BODY_TEMPLATE % message)
         return True

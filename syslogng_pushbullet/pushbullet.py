@@ -12,9 +12,7 @@ class PushbulletClient(object):
     def __init__(self, api_key):
         self.api_key = api_key
         self.session = requests.Session()
-        self.session.headers.update({
-            "Access-Token": self.api_key
-        })
+        self.session.headers.update({"Access-Token": self.api_key})
 
     def list_devices(self):
         """List devices"""
@@ -28,9 +26,11 @@ class PushbulletClient(object):
 
     def push_note(self, device_iden, title, body):
         """Push note to a device"""
-        self.session.post(PUSH_URL, json={
-            "device_iden": device_iden,
-            "type": "note",
-            "title": title,
-            "body": body
-        })
+        self.session.post(
+            PUSH_URL,
+            json={
+                "device_iden": device_iden,
+                "type": "note",
+                "title": title,
+                "body": body
+            })
