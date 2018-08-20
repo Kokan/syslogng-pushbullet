@@ -11,8 +11,8 @@ from .pushbullet import PushbulletClient
 class PushbulletDestination(Destination):
     """Pushbullet destination for syslog-ng"""
 
-    TITLE_TEMPLATE = "%(HOST)s %(PROGRAM)s [%(PID)s]"
-    BODY_TEMPLATE = "%(MESSAGE)s"
+    title_template = "%(HOST)s %(PROGRAM)s [%(PID)s]"
+    body_template = "%(MESSAGE)s"
 
     def __init__(self):
         self.api_key = None
@@ -24,6 +24,10 @@ class PushbulletDestination(Destination):
             return False
         self.api_key = args["api_key"]
         self.device = args["device"]
+        if "title_template" in args:
+            self.title_template = args["title_template"]
+        if "body_template" in args:
+            self.body_template = args["body_template"]
         self.client = PushbulletClient(self.api_key)
         self.device_iden = self.client.device_by_nickname(self.device)
         if not self.device_iden:
@@ -33,8 +37,8 @@ class PushbulletDestination(Destination):
     def send(self, message):
         try:
             self.client.push_note(self.device_iden,
-                                  self.TITLE_TEMPLATE % message,
-                                  self.BODY_TEMPLATE % message)
+                                  self.title_template % message,
+                                  self.body_template % message)
         except requests.HTTPError:
             return False
         else:
